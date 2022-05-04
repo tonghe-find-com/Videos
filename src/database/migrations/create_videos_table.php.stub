@@ -1,0 +1,66 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateVideosTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return null
+     */
+    public function up()
+    {
+        Schema::create('videocategories', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->integer('image_id')->unsigned()->nullable();
+            $table->json('status');
+            $table->json('title');
+            $table->json('slug');
+             //排序
+            $table->integer('position')->unsigned()->default(0);
+            //metatag
+            $table->json('meta_title');
+            $table->json('meta_keywords');
+            $table->json('meta_description');
+            $table->timestamps();
+        });
+        Schema::create('videos', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->integer('image_id')->unsigned()->nullable();
+            $table->json('status');
+            $table->json('title');
+            $table->json('slug');
+            $table->json('url');
+            $table->json('body');
+            //排序
+            $table->integer('position')->unsigned()->default(0);
+            //類別id
+            $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('videocategories');
+            $table->json('show_homepage');
+            $table->date('show_date');
+            //metatag
+            $table->json('meta_title');
+            $table->json('meta_keywords');
+            $table->json('meta_description');
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return null
+     */
+    public function down()
+    {
+        Schema::drop('videos');
+        Schema::drop('videocategories');
+    }
+}
